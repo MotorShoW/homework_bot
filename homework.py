@@ -44,13 +44,11 @@ bot = Bot(token=TELEGRAM_TOKEN)
 
 class BotException(Exception):
     """Исключение бота"""
-
     pass
 
 
 def send_message(bot, message):
     """Отправка сообщения в Telegram"""
-
     try:
         logging.info('Отправка сообщения')
         return bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
@@ -70,7 +68,6 @@ def send_message(bot, message):
 
 def get_api_answer(current_timestamp):
     """Запрос к эндпоинту"""
-
     logging.info('Обращение к серверу')
     timestamp = current_timestamp or int(time.time())
     try:
@@ -100,7 +97,6 @@ def get_api_answer(current_timestamp):
 
 def check_response(response):
     """Проверка ответа API на корректность"""
-
     logging.info('Проверка ответа API на корректность')
 
     if response['homeworks'] is None:
@@ -124,7 +120,6 @@ def check_response(response):
 
 def parse_status(homework):
     """Получение статуса домашней работы"""
-
     homework_name = homework['homework_name']
     homework_status = homework['status']
 
@@ -138,7 +133,6 @@ def parse_status(homework):
 
 def check_tokens():
     """Проверка доступности переменных окружения"""
-
     if PRACTICUM_TOKEN is None or \
             TELEGRAM_TOKEN is None or \
             TELEGRAM_CHAT_ID is None:
@@ -151,7 +145,6 @@ def check_tokens():
 
 def main():
     """Основная логика работы бота."""
-
     if not check_tokens():
         return 0
     current_timestamp = int(time.time())
