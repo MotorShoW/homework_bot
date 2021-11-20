@@ -1,10 +1,10 @@
+import json
 import logging
 import os
 import time
-import json
-import telegram
 
 import requests
+import telegram
 from dotenv import load_dotenv
 from telegram import Bot
 
@@ -37,9 +37,6 @@ HOMEWORK_STATUSES = {
     'reviewing': 'Работа взята на проверку ревьюером.',
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
-
-
-bot = Bot(token=TELEGRAM_TOKEN)
 
 
 class BotException(Exception):
@@ -107,16 +104,8 @@ def check_response(response):
     if not isinstance(response['homeworks'], list):
         logging.info(f'{response["homeworks"]} Не является списком')
         raise BotException(f'{response["homeworks"]} Не является списком')
-
-    if 'error' in response:
-        if 'error' in response['error']:
-            logging.info(response['error']['error'])
-            raise BotException(response['error']['error'])
-
-    if 'code' in response:
-        logging.info(response['message'])
-        raise BotException(response['message'])
     logging.info('Проверка на корректность завершена')
+    return response['homeworks']
 
 
 def parse_status(homework):
@@ -124,7 +113,7 @@ def parse_status(homework):
     homework_name = homework['homework_name']
     homework_status = homework['status']
 
-    verdict = HOMEWORK_STATUSES['homework_status']
+    verdict = HOMEWORK_STATUSES[homework.get('status')]
 
     if homework_status not in HOMEWORK_STATUSES:
         logging.error('Недокументированный статус домашней работы')
@@ -149,6 +138,7 @@ def main():
     if not check_tokens():
         return 0
     current_timestamp = int(time.time())
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
     while True:
         try:
