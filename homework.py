@@ -6,7 +6,6 @@ import time
 import requests
 import telegram
 from dotenv import load_dotenv
-from telegram import Bot
 
 logging.basicConfig(
     level=logging.INFO,
