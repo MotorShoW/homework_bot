@@ -43,7 +43,7 @@ bot = Bot(token=TELEGRAM_TOKEN)
 
 
 class BotException(Exception):
-    """Исключение бота"""
+    """Исключение бота."""
 
     pass
 
