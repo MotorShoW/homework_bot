@@ -92,15 +92,9 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     logger.info('Проверка ответа API на корректность')
 
-    if 'homeworks' not in response:
-        if 'homeworks' not in response['homeworks']:
-            logger.error('Чудеса')
-            raise BotException('И Магия')
-
     if 'error' in response:
-        if 'error' in response['error']:
-            logger.error(response['error'])
-            raise BotException(response['error'])
+        logger.error(response['error'])
+        raise BotException(response['error'])
 
     if response['homeworks'] is None:
         logger.info('Нет заданий')
@@ -110,7 +104,13 @@ def check_response(response):
         logger.info(f'{response["homeworks"]} Не является списком')
         raise BotException(f'{response["homeworks"]} Не является списком')
     logger.info('Проверка на корректность завершена')
-    return response['homeworks']
+
+    if 'homeworks' in response:
+        return response['homeworks']
+
+    else:
+        logger.error('Отсутствие ключа homeworks')
+        raise BotException('Отсутствие ключа homeworks')
 
 
 def parse_status(homework):
@@ -118,13 +118,13 @@ def parse_status(homework):
     homework_name = homework['homework_name']
     homework_status = homework['status']
 
-    if not homework_name:
-        logger.error('Чудеса')
-        raise BotException('И только')
+    if 'homework_name' not in homework:
+        logger.error('Отсутствие ключа homework_name')
+        raise BotException('Отсутствие ключа homework_name')
 
-    if not homework_status:
-        logger.error('Художественный фильм')
-        raise BotException('Сп*здили')
+    if 'status' not in homework:
+        logger.error('Отсутствие ключа status')
+        raise BotException('Отсутствие ключа status')
 
     verdict = HOMEWORK_STATUSES[homework.get('status')]
 
