@@ -92,6 +92,11 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     logger.info('Проверка ответа API на корректность')
 
+    if isinstance(response, dict):
+        if 'homeworks' not in response.keys():
+            logger.error('Отсутствие ключа homeworks')
+            raise BotException('Отсутствие ключа homeworks')
+
     if 'error' in response:
         logger.error(response['error'])
         raise BotException(response['error'])
@@ -105,26 +110,21 @@ def check_response(response):
         raise BotException(f'{response["homeworks"]} Не является списком')
     logger.info('Проверка на корректность завершена')
 
-    if 'homeworks' in response:
-        return response['homeworks']
-
-    else:
-        logger.error('Отсутствие ключа homeworks')
-        raise BotException('Отсутствие ключа homeworks')
+    return response['homeworks']
 
 
 def parse_status(homework):
     """Получение статуса домашней работы."""
-    homework_name = homework['homework_name']
-    homework_status = homework['status']
-
-    if 'homework_name' not in homework:
+    if 'homework_name' not in homework.keys():
         logger.error('Отсутствие ключа homework_name')
         raise BotException('Отсутствие ключа homework_name')
 
-    if 'status' not in homework:
+    if 'status' not in homework.keys():
         logger.error('Отсутствие ключа status')
         raise BotException('Отсутствие ключа status')
+
+    homework_name = homework['homework_name']
+    homework_status = homework['status']
 
     verdict = HOMEWORK_STATUSES[homework.get('status')]
 
