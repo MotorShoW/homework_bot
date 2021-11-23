@@ -94,8 +94,7 @@ def check_response(response):
 
     if isinstance(response, dict):
         if 'homeworks' not in response.keys():
-            logger.error('Отсутствие ключа homeworks')
-            raise BotException('Отсутствие ключа homeworks')
+            raise BotException('Отсутствует ключевое значение - "homeworks"')
 
     if 'error' in response:
         logger.error(response['error'])
@@ -116,12 +115,12 @@ def check_response(response):
 def parse_status(homework):
     """Получение статуса домашней работы."""
     if 'homework_name' not in homework.keys():
-        logger.error('Отсутствие ключа homework_name')
-        raise BotException('Отсутствие ключа homework_name')
+        logger.error('Отсутствует ключ homework_name')
+        raise KeyError('Отсутствует ключ homework_name')
 
     if 'status' not in homework.keys():
-        logger.error('Отсутствие ключа status')
-        raise BotException('Отсутствие ключа status')
+        logger.error('Отсутствует ключ status')
+        raise KeyError('Отсутствует ключ status')
 
     homework_name = homework['homework_name']
     homework_status = homework['status']
